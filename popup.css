@@ -1,0 +1,37 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevents scroll bars */
+    width: 799px; /* Set width to match popup dimensions */
+    height: 599px; /* Set height to match popup dimensions */
+}
+
+canvas {
+    border: 1px solid black;
+    cursor: crosshair;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+/* Icon styling */
+.header .icons {
+    display: flex;
+    gap: 15px;
+}
+
+.header .icons i {
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.header .icons i:hover {
+    color: #ddd;
+}
