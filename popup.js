@@ -63,23 +63,41 @@ Helpers for inference
 
 const tokenizer = new LaTeX_Tokenizer();
 
-async function runInference(max_size) {
-    const session = await ort.InferenceSession.create('model_2.onnx');
+async function loadModel() {
+    const onnxFileBuffer = await (await fetch('model_3.onnx')).arrayBuffer()
+    const onnxArray = new Uint8Array(onnxFileBuffer);
+    const dataFileBuffer = await (await fetch('model_3.onnx.data')).arrayBuffer()
+    const dataArray = new Uint8Array(dataFileBuffer)
+    const sessionPromise = await ort.InferenceSession.create(onnxArray, {
+        executionProviders: ["wasm"] ,
+        externalData: [{path: './model_3.onnx.data', data: dataArray}]
+    });
+
+    const model = await sessionPromise;
+    return model;
+}
+
+
+async function runInference(max_size, model) {
     const image_tensor = generate_image_tensor(ctx.getImageData(0, 0, 512, 384));
     let output;
     let tgt_in_values = new BigInt64Array(max_size);
 
     for (let i=1; i < max_size; i++) {
-        output = await session.run({ 
-            src: image_tensor,
-            tgt: generate_tgt_in(tgt_in_values.slice(0, i)),
-            tgt_mask: generate_tgt_mask(i)
-        });
+        output = await model.run({ 
+            'src': image_tensor,
+            'tgt': generate_tgt_in(tgt_in_values.slice(0, i)),
+            'tgt_mask': generate_tgt_mask(i)
+        }); 
         tgt_in_values[i] = tgt_in_values[0];
         console.log("output: ", output);
-        break
     }
-
 }
 
-// runInference(10);
+async function main() {
+    const model = await loadModel();
+    runInference(5, model);
+}
+
+
+main();

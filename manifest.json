@@ -25,7 +25,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.html", "model_2.onnx", "model_2.onnx.data"],
+      "resources": ["popup.html", "model_3.onnx", "model_3.onnx.data"],
       "matches": ["<all_urls>"]
     }
   ],

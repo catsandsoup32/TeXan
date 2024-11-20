@@ -1,3 +1,4 @@
+
 async function testInference() {
     const session = await ort.InferenceSession.create('C:/Users/edmun/Desktop/VSCode Projects/TeXan/model_2.onnx');
     console.log("Model loading successful");
@@ -20,20 +21,6 @@ async function testInference() {
 }
 
 
-
-async function loadModel() {
-
-    const onnxFileBuffer = await (await fetch('model_2.onnx')).arrayBuffer()
-    const dataFileBuffer = await (await fetch('model_2.onnx.data')).arrayBuffer()
-    const sessionPromise = await ort.InferenceSession.create(onnxFileBuffer, {
-        executionProviders: ["wasm"] ,
-        externalData: [{path: './model_a.data', data: externalDataArray}]
-    });
-
-    const model = await sessionPromise;
-
-    return model
-}
 
 async function loadLocalModel() {
     // Get local URLs for the ONNX files
@@ -64,4 +51,3 @@ async function loadLocalModel() {
     console.log('Local ONNX model loaded successfully:', mySession);
   }
   
-loadLocalModel();
